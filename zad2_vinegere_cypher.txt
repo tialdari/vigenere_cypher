@@ -1,0 +1,75 @@
+
+
+1. .data
+	
+	//rodzaj operacji
+	//klucz
+	//tekst do zaszyfrowania
+
+    .text
+
+	main:
+
+		while:
+
+		//pobierz rodzaj operacji (int)
+		//zapisz rodzaj operacji
+
+		//pobierz klucz
+		//zapisz klucz
+
+		//pobierz tekst
+		//zapisz tekst
+
+		//jeśli zaszyfrowanie -> encrypt:
+		//jeśli odszyfrowanie -> decrypt:
+
+		//encrypt lub decrypt
+
+		//czy kontynuwać
+		//jak tak, idź do while
+		//jak nie, idź do exit
+
+
+	encrypt:
+	
+		//pętla
+		//bierzemy kolejno literki z tekstu i klucza (kiedy klucz się skończy, zapętlamy go) 
+		//i szyfrujemy równianiem C = E(M) = (M + K) % 26; liczenie zaczynamy od 0
+		//po każdej literce nadpisujemy zawartośc rejestru, w którym ostatecznie znajdzie się cały zaszyfrowany tekst
+		//komunikat o zaszyfrowanej wiadomości
+		//wydrukuj zaszyfrowaną wiadomość
+
+
+	decrypt:
+
+		//pętla
+		//bierzemy kolejno literki z zaszyfrowanego tekstu i klucza (kiedy klucz się skończy, zapętlamy go) 
+		//i odszyfrujemy równianiem M = D(C) = (C - K) % 26; liczenie zaczynamy od 0
+		//po każdej literce nadpisujemy zawartośc rejestru, w którym ostatecznie znajdzie się cały odszyfrowany tekst
+		//komunikat o odszyfrowanej wiadomości
+		//wydrukuj odszyfrowaną wiadomość
+
+
+		
+
+	print:
+		//drukuj tekst
+
+	
+	exit:
+		//koniec programu
+
+
+Uwagi.....
+- jak zapętlić klucz?
+
+
+
+
+
+
+
+
+
+

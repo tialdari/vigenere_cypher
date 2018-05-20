@@ -25,11 +25,15 @@
 		#gets the input from the user
 		li $v0, 8
 		la $a0, userInputText
-		li $a1, 18
+		li $a1, 17
 		syscall
 		
 		#saves the input in the $t0 register
 		move $t4, $a0
+		
+		li $v0, 4
+		la $a0, line
+		syscall
 		
 		#asks for the key
 		li $v0, 4
@@ -39,7 +43,7 @@
 		#gets the input from the user
 		li $v0, 8
 		la $a0, userInputKey
-		li $a1, 18
+		li $a1, 17
 		syscall
 		
 		#saves the input in the $t1 register
@@ -57,25 +61,25 @@
    		bgt $t0, 16, resetCounter
    		bgt $t1, 16, exit
    		
-   		li $v0, 11
+   		#li $v0, 11
    		lb $a0, userInputKey($t0)
-   		syscall
+   		#syscall
    		
    		move $t2, $a0
    		
-   		li $v0, 4
-		la $a0, space
-		syscall
+   		#li $v0, 4
+		#la $a0, space
+		#syscall
    		
-   		li $v0, 11
+   		#li $v0, 11
    		lb $a0, userInputText($t1)
-   		syscall
+   		#syscall
    		
  		move $t3, $a0
  		
- 		li $v0, 4
-		la $a0, space
-		syscall
+ 		#li $v0, 4
+		#la $a0, space
+		#syscall
    		
 		add $t2, $t2, $t3
    		sub $t2, $t2, 194
@@ -90,9 +94,9 @@
    		move $a0, $t2
    		syscall
    		
-   		li $v0, 4
-		la $a0, line
-		syscall
+   		#li $v0, 4
+		#la $a0, line
+		#syscall
    		
    		
    		

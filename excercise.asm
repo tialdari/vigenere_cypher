@@ -1,4 +1,3 @@
-
 .data
     text: .asciiz "dozwoloneznakiheh"
     key: .asciiz "klucz"
@@ -40,8 +39,15 @@
    		syscall
    		
    		add $t2, $t2, $t3
+   		sub $t2, $t2, 194
    		
-   		li $v0, 1
+   		bgt $t2, 25, substract
+   		
+
+   	continue:
+   		 add $t2, $t2, 97
+   		
+   		li $v0, 11
    		move $a0, $t2
    		syscall
    		
@@ -63,4 +69,9 @@
    
 	li $t0, 0
    	j while
+   	
+   substract:
+   	sub $t2, $t2, 26
+   	
+   	j continue
    	

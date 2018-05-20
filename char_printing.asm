@@ -1,6 +1,7 @@
 .data
-    string: .asciiz "domek "
+    string: .asciiz "dozwolone16znakow"
     char: .asciiz "c"
+    line: .asciiz "\n"
 
 .text
 .globl main
@@ -16,12 +17,16 @@
 
 
 	
-   	 li $v0, 11                  # service 11 is print character
+   	 li $v0, 1                 # service 11 is print character
    	 lb  $a0, string($t0)
-   	    	 beqz $a0, exit
+   	 move $t1, $a0
+   	 bgt $t0, 16, exit
    	 syscall
    	 
-
+   	
+   	la $a0, line
+	li $v0,4
+	syscall
    	 
    	 addi, $t0, $t0, 1
    	 

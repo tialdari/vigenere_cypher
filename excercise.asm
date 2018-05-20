@@ -4,6 +4,7 @@
     key: .asciiz "klucz"
     line: .asciiz "\n"
     space: .asciiz "  "
+    arrow: .asciiz "->"
     reset: .asciiz "resetCounter"
 
 .text
@@ -22,6 +23,8 @@
    		lb $a0, key($t0)
    		syscall
    		
+   		move $t2, $a0
+   		
    		li $v0, 4
    		la $a0, space
    		syscall
@@ -30,9 +33,17 @@
    		lb $a0, text($t1)
    		syscall
    		
-   		#li $v0, 1
-   		#lb $a1, key($t0)
-   		#syscall
+   		move $t3, $a0
+   		
+   		li $v0, 4
+   		la $a0, arrow
+   		syscall
+   		
+   		add $t2, $t2, $t3
+   		
+   		li $v0, 1
+   		move $a0, $t2
+   		syscall
    		
    		li $v0, 4
    		la $a0, line

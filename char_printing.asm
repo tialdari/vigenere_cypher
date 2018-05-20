@@ -1,40 +1,85 @@
 .data
-    string: .asciiz "dozwolone16znakow"
-    char: .asciiz "c"
+    text: .asciiz "dozwoloneznakowhj"
+    key: .asciiz "klucz"
     line: .asciiz "\n"
+    space: .asciiz "  "
+    plus: .asciiz "+"
+    arrow: .asciiz "->"
+    equals: .asciiz "="
 
 .text
-.globl main
+ 
     main:   
 
-   	la $a0, string 
-   	addi $t0, $zero, 0  
-   			           # load the addr of the given string into $a0. 
+   	la $a0, text 		#load the text at the register $a0
+   	la $a1, key		#load the key at the register $a1
+   	
+   	addi $t0, $zero, 0  	#initialise the counter for the text
+   	addi $t1, $zero, 0	#initialise the counter for the key
+   	
+  while:
+  
+  
+	
+	bgt $t1, 4, resetKeyCounter #jeśli program przeszedł przez klucz, zapętl go
+   	
+   	continue:
+   	
+   	li $v0, 11
+   	lb  $a0, text($t0)	   #załaduj kolejną literę tekstu
+   	bgt $t0, 16, exit	   #jeśli program preszedł przez cąły tekst, zakończ go
+	syscall
+	
+	#li $v0, 4
+	#la $a0, plus
+	#syscall
+	
+	li $v0, 11
+	lb $a0, key($t1)
+	syscall
 	
 	
-	while:
-	#sbeqz $a1, exit
+	
 
-
+   		# załaduj kolejną literę klucza
+   	
+   	#add $t2, $a0, $a1	# dodaj reprezentację  litery klucza i litery tekstu
+		
+	#sub $t3, $t2, 194
 	
-   	 li $v0, 1                 # service 11 is print character
-   	 lb  $a0, string($t0)
-   	 move $t1, $a0
-   	 bgt $t0, 16, exit
-   	 syscall
-   	 
+	#add $t3, $t3, 97
+	
+	#drukuje wynik
+	li $v0, 4
+	la $a0, equals
+	syscall
+		
+	li $v0, 1
+	move $a0, $t2
+	syscall
    	
    	la $a0, line
 	li $v0,4
 	syscall
    	 
-   	 addi, $t0, $t0, 1
+   	 
+   	 
+   	addi, $t0, $t0, 1
+   	addi, $t1, $t1, 1
    	 
    	j while
   
     exit:
-    li $v0, 10                # return control to SPIM OS
-    syscall
+    
+    	li $v0, 10               
+    	syscall
    	 
-   	 
-   
+   resetKeyCounter:
+  
+   	sub $t1, $t1, 4
+   	
+   	la $a0, arrow
+	li $v0,4
+	syscall
+	
+   	j continue

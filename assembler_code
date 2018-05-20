@@ -97,6 +97,7 @@
 		move $a0, $t1
 		syscall
 		
+		j addNumbers
 		
 		j continue
 		
@@ -117,6 +118,37 @@
 		move $t0, $a0
 		
 	
-		j continue
+		j exit
 	
+	addNumbers:
+
+  
+		while2:
+		bgt $t1, 4, resetKeyCounter #jeśli program przeszedł przez klucz, zapętl go
+		bgt $t0, 16, exit	   #jeśli program preszedł przez cąły tekst, zakończ go
+
+   		lb  $a0, userInputText($t0)	   #załaduj kolejną literę tekstu
+   		lb $a1, userInputKey($t1)	# załaduj kolejną literę klucza
+   	
+   		add $t2, $a0, $a1	# dodaj reprezentację  litery klucza i litery tekstu
+		
+		sub $t3, $t2, 194
+		
+		li $v0, 1
+ 		move $a0, $t3
+ 		syscall
+
+		
+   		addi, $t0, $t0, 1
+   		addi, $t1, $t1, 1
+   	 
+   		j while2
+  
+   resetKeyCounter:
+   
+   	
+	
+   	addi $t1, $zero, 0
+   	 
+   	j while2
 

@@ -1,12 +1,13 @@
 .data
 
 	operationPrompt: .asciiz "Choose operation (encryption: 0 decryption: 1) "
-	keyPrompt: .asciiz "Type in the key(max. 8 characters)"
 	encTextPrompt: .asciiz "Type in the message you want to encrypt(max. 16 characters)"
 	decTextPrompt: .asciiz "Type in the message you want to decrypt(max. 16 characters)"
+	userInput: .space 16
+	keyPrompt: .asciiz "Type in the key(max. 8 characters)"
 	encText: .asciiz "The encrypted message: "
 	decText: .asciiz "The decrypted message: "
-	ifContinue: .asciiz "\n\no Do you want to continue? Yes: 1 No: 0\n”
+	ifContinue: .asciiz "\n\n Do you want to continue? Yes: 1 No: 0\n”
 
 .text
 
@@ -14,6 +15,23 @@
 	
 	while:
 	
+		#asks for the operation
+		li $v0, 4
+		la $a0, operationPrompt
+		syscall
+	
+		#takes the input (0 or 1)
+		li $v0, 5
+		syscall
+	
+		#saves the input in the $t0 register
+		move $t0, $v0
+		
+		#checks which operation the user has chosen and continues according to the operation
+		beq $t1, 0, encrypt
+		beq $t1, 1, decrypt
+		
+		
 		continue:
 		
 		#asks the user whether to continue
@@ -37,4 +55,42 @@
 		#end of the programme
 		li $v0, 10
 		syscall
+		
+	encrypt:
+	
+		#asks for the message
+		li $v0, 4
+		la $a0, encTextPrompt
+		syscall
+		
+		#gets the input from the user
+		li $v0, 8
+		la $a0, userInput
+		li $a1, 16
+		syscall
+		
+		#saves the input in the $t0 register
+		move $t0, $a0
+		
+		j continue
+		
+	decrypt:
+	
+		#asks for the message	
+		li $v0, 4
+		la $a0, decTextPrompt
+		syscall
+		
+		#gets the input from the user
+		li $v0, 8
+		la $a0, userInput
+		li $a1, 16
+		syscall
+	
+		#saves the input in the $t0 register
+		move $t0, $a0
+		
+	
+		j continue
+	
 

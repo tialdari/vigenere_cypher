@@ -63,6 +63,7 @@
 
 Uwagi.....
 - jak zapętlić klucz?
+- jak pobrać stringa?
 
 
 

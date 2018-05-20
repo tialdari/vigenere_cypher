@@ -18,36 +18,30 @@
    	addi $t1, $zero, 0	#initialise the counter for the key
    	
   while:
-  
-  
-	
+ 
 	bgt $t1, 4, resetKeyCounter #jeśli program przeszedł przez klucz, zapętl go
-   	
-   	continue:
-   	
-   	li $v0, 11
+      	
+   	li $v0, 1
    	lb  $a0, text($t0)	   #załaduj kolejną literę tekstu
-   	bgt $t0, 16, exit	   #jeśli program preszedł przez cąły tekst, zakończ go
+   	bgt $t0, 16, exit	   #jeśli program preszedł przez cały tekst, zakończ go
 	syscall
 	
-	#li $v0, 4
-	#la $a0, plus
-	#syscall
-	
-	li $v0, 11
-	lb $a0, key($t1)
+	li $v0, 4
+	la $a0, plus
 	syscall
 	
+
+	lb $a1, key($t1)
 	
-	
+
 
    		# załaduj kolejną literę klucza
    	
-   	#add $t2, $a0, $a1	# dodaj reprezentację  litery klucza i litery tekstu
-		
-	#sub $t3, $t2, 194
+   	add  $t2, $a0, $a1	# dodaj reprezentację  litery klucza i litery tekstu
+
+	sub  $t3, $t2, 97
 	
-	#add $t3, $t3, 97
+	
 	
 	#drukuje wynik
 	li $v0, 4
@@ -55,7 +49,7 @@
 	syscall
 		
 	li $v0, 1
-	move $a0, $t2
+	move $a2, $t2
 	syscall
    	
    	la $a0, line
@@ -77,9 +71,4 @@
    resetKeyCounter:
   
    	sub $t1, $t1, 4
-   	
-   	la $a0, arrow
-	li $v0,4
-	syscall
-	
-   	j continue
+   	j while

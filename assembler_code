@@ -9,6 +9,7 @@
 	encText: .asciiz "The encrypted message: "
 	decText: .asciiz "The decrypted message: "
 	ifContinue: .asciiz "\n\n Do you want to continue? Yes: 1 No: 0\n”
+	space: .asciiz " "
 
 .text
 
@@ -84,22 +85,72 @@
 		li $a1, 8
 		syscall
 		
-		#saves the input in the $t0 register
+		#saves the input in the $t1 register
 		move $t1, $a0
 		
-		#prints the message
-		li $v0, 4
-		move $a0, $t0
+		
+		
+		addi $t2, $zero, 0
+   		addi $t3, $zero, 0
+		
+	while2:
+	
+   	
+   		bgt $t0, 4, resetCounter
+   		bgt $t1, 16, continue
+   		
+   		lb $a0, userInputKey($t2)
+   		move $t4, $a0
+   		
+   		li $v0, 4
+		la $a0, space
 		syscall
 		
-		#prints the key
-		li $v0, 4
-		move $a0, $t1
-		syscall
+   		
+   		li $v0, 11
+   		lb $a0, userInputKey($t3)
+   		syscall
+   		
+ 		move $t5, $a0
+   		
+   		
 		
-		j addNumbers
+   		
+   		
+		add $t5, $t4, $t5
+   		sub $t5, $t5, 194
+   		
+   		bgt $t5, 25, substract
+   		
+   	continue2:
+   	
+   		add $t5, $t5, 97
+   		
+   		li $v0, 11
+   		move $a0, $t5
+   		syscall
+   		
+   		addi $t2, $t2, 1
+   		addi $t3, $t3, 1
+   		
+   		j while2
+  	
+  
+
+   resetCounter:
+   
+	li $t0, 0
+   	j while2
+   	
+   substract:
+   	sub $t5, $t5, 26
+   	
+   	j continue2
+   	
 		
-		j continue
+
+		
+
 		
 	decrypt:
 	
@@ -120,35 +171,5 @@
 	
 		j exit
 	
-	addNumbers:
-
-  
-		while2:
-		bgt $t1, 4, resetKeyCounter #jeśli program przeszedł przez klucz, zapętl go
-		bgt $t0, 16, exit	   #jeśli program preszedł przez cąły tekst, zakończ go
-
-   		lb  $a0, userInputText($t0)	   #załaduj kolejną literę tekstu
-   		lb $a1, userInputKey($t1)	# załaduj kolejną literę klucza
-   	
-   		add $t2, $a0, $a1	# dodaj reprezentację  litery klucza i litery tekstu
-		
-		sub $t3, $t2, 194
-		
-		li $v0, 1
- 		move $a0, $t3
- 		syscall
-
-		
-   		addi, $t0, $t0, 1
-   		addi, $t1, $t1, 1
-   	 
-   		j while2
-  
-   resetKeyCounter:
-   
-   	
 	
-   	addi $t1, $zero, 0
-   	 
-   	j while2
-
+  

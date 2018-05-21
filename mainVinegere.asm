@@ -87,10 +87,11 @@
    	while:
    	
    		bgt $t0, 16, resetCounter
-   		bgt $t1, 16, ifContinuee
+   		bgt $t1, 17, ifContinuee
    		
    		#li $v0, 11
    		lb $a0, userInputKey($t0)
+   		beq $a0, 10, ifContinuee
    		#syscall
    		
    		move $t2, $a0
@@ -175,10 +176,12 @@
    	while2:
    	
    		bgt $t0, 16, resetCounter
-   		bgt $t1, 16, ifContinuee
+   		bgt $t1, 17, ifContinuee
    		
    		#li $v0, 11
    		lb $a0, userInputKey($t0)
+   		beq $a0, $zero, ifContinuee
+
    		#syscall
    		
    		move $t2, $a0
@@ -217,11 +220,11 @@
    		addi $t0, $t0, 1
    		addi $t1, $t1, 1
    		
+   		
+   		
    		j while2
 
 	add: 
 		add $t3, $t3, 26
   		
 	   	j continue2
-
-  	

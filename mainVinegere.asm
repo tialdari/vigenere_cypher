@@ -80,25 +80,26 @@
  		#li $v0, 4
 		#la $a0, space
 		#syscall
+		
+	encrypt:
+	decrypt:
    		
 		add $t2, $t2, $t3
    		sub $t2, $t2, 194
    		
    		bgt $t2, 25, substract
    		
-   	continue:
+	continue:
    	
    		add $t2, $t2, 97
    		
-   		li $v0, 11
+   		li $v0, 1
    		move $a0, $t2
    		syscall
    		
-   		#li $v0, 4
-		#la $a0, line
-		#syscall
-   		
-   		
+   		li $v0, 4
+		la $a0, line
+		syscall
    		
    		addi $t0, $t0, 1
    		addi $t1, $t1, 1
@@ -119,4 +120,33 @@
    	sub $t2, $t2, 26
    	
    	j continue
+   	
+   
+   decrypt:
+
+	add $t3, $t3, 97			
+   	sub $t3, $t3, $t2
+   		
+   	blt $t3, 97, add
+				
+	continue2:
+   	   		
+   	li $v0, 1
+   	move $a0, $t2
+   	syscall
+   		
+   	li $v0, 4
+	la $a0, line
+	syscall
+   		
+   	
+   	addi $t0, $t0, 1
+   	addi $t1, $t1, 1
+   		
+   	j while
+   	
+   add: 
+	add $t3, $t3, 26
+  		
+	j continue2
    	

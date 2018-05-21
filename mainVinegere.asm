@@ -5,19 +5,30 @@
     space: .asciiz "  "
     arrow: .asciiz "->"
     reset: .asciiz "resetCounter"
-    encTextPrompt: .asciiz "Type in the message you want to encrypt(max. 16 characters)"
-	decTextPrompt: .asciiz "Type in the message you want to decrypt(max. 16 characters)"
-	userInputText: .space 18
-	userInputKey: .space 18
-	keyPrompt: .asciiz "Type in the key(max. 16 characters)"
-	encText: .asciiz "The encrypted message: "
-	decText: .asciiz "The decrypted message: "
-	operationPrompt: .asciiz "Choose operation (encryption: 0 decryption: 1) "
+    encTextPrompt: .asciiz "Type in the message you want to encrypt or decrypt(max. 16 characters)"
+    decTextPrompt: .asciiz "Type in the message you want to decrypt(max. 16 characters)"
+    userInputText: .space 18
+    userInputKey: .space 18
+    keyPrompt: .asciiz "Type in the key(max. 16 characters)"
+    encText: .asciiz "The encrypted message: "
+    decText: .asciiz "The decrypted message: "
+    operationPrompt: .asciiz "Choose operation (encryption: 0 decryption: 1) "
+    ifContinue: .asciiz "\n\n Do you want to continue? Yes: 1 No: 0\n”
+    encryption: .asciiz "Encrypted message: "
+    decryption: .asciiz "Decrypted message: "
+    end: .asciiz "End of programme"
 
 .text
  
     main:  
-    	#asks for the operation
+    
+    	start:
+    		
+    		li $v0, 0
+    		li $t0, 0
+   		li $t1, 0
+   	
+    		#asks for the operation
 		li $v0, 4
 		la $a0, operationPrompt
 		syscall
@@ -30,7 +41,7 @@
 		move $t6, $v0
 		
     
-    	#asks for the message
+    		#asks for the message
 		li $v0, 4
 		la $a0, encTextPrompt
 		syscall
@@ -44,9 +55,6 @@
 		#saves the input in the $t0 register
 		move $t4, $a0
 		
-		li $v0, 4
-		la $a0, line
-		syscall
 		
 		#asks for the key
 		li $v0, 4
@@ -71,14 +79,15 @@
 		beq $t6, 1, decrypt
 		
    	
-  	addi $t0, $zero, 0
-   	addi $t1, $zero, 0
+  		addi $t0, $zero, 0
+   		addi $t1, $zero, 0
    	
    	encrypt:
+   	
    	while:
    	
    		bgt $t0, 16, resetCounter
-   		bgt $t1, 16, exit
+   		bgt $t1, 16, ifContinuee
    		
    		#li $v0, 11
    		lb $a0, userInputKey($t0)
@@ -115,37 +124,58 @@
    		move $a0, $t2
    		syscall
    		
-   		li $v0, 4
-		la $a0, line
-		syscall
+   		#li $v0, 4
+		#la $a0, line
+		#syscall
    		
    		addi $t0, $t0, 1
    		addi $t1, $t1, 1
    		
    		j while
+   		
+   	ifContinuee:
+   	
+   		#asks the user whether to continue
+		li $v0, 4
+		la $a0, ifContinue
+		syscall
+		
+		#takes the answer
+		li $v0, 5
+		syscall
+		
+		#saves the answer in the $t0 register
+		move $t0, $v0
+		
+		#exits or continues the programme
+		beq $t0, 0, exit
+		beq $t0, 1, start
   	
-   exit:
+   	exit:
+ 		li $v0, 4
+		la $a0, end
+		syscall
  
-  	li $v0, 10
-  	syscall
+  		li $v0, 10
+  		syscall
 
-   resetCounter:
+       resetCounter:
    
-	li $t0, 0
-   	j while
+		li $t0, 0
+   		j while
    	
-   substract:
-   	sub $t2, $t2, 26
-   	
-   	j continue
+      substract:
+      
+   		sub $t2, $t2, 26
+   		j continue
    	
    
-   decrypt:
+      decrypt:
 
    	while2:
    	
    		bgt $t0, 16, resetCounter
-   		bgt $t1, 16, exit
+   		bgt $t1, 16, ifContinuee
    		
    		#li $v0, 11
    		lb $a0, userInputKey($t0)
@@ -174,6 +204,7 @@
 				
    	continue2:
    	   		
+   	   	
    		li $v0, 11
    		move $a0, $t3
    		syscall

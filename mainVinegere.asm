@@ -9,7 +9,7 @@
 	decTextPrompt: .asciiz "Type in the message you want to decrypt(max. 16 characters)"
 	userInputText: .space 18
 	userInputKey: .space 18
-	keyPrompt: .asciiz "Type in the key(max. 8 characters)"
+	keyPrompt: .asciiz "Type in the key(max. 16 characters)"
 	encText: .asciiz "The encrypted message: "
 	decText: .asciiz "The decrypted message: "
 	operationPrompt: .asciiz "Choose operation (encryption: 0 decryption: 1) "
@@ -65,10 +65,16 @@
 		li $v0, 4
 		la $a0, line
 		syscall
+		
+		#checks which operation the user has chosen and continues according to the operation
+		beq $t6, 0, encrypt
+		beq $t6, 1, decrypt
+		
    	
-  	li $t0, 10
+  	addi $t0, $zero, 0
    	addi $t1, $zero, 0
    	
+   	encrypt:
    	while:
    	
    		bgt $t0, 16, resetCounter
@@ -94,12 +100,6 @@
 		#la $a0, space
 		#syscall
 		
-		#checks which operation the user has chosen and continues according to the operation
-		beq $t6, 0, encrypt
-		beq $t6, 1, decrypt
-		
-		
-	encrypt:
 
    		
 		add $t2, $t2, $t3
@@ -142,29 +142,55 @@
    
    decrypt:
 
-	add $t3, $t3, 97			
-   	sub $t3, $t3, $t2
+   	while2:
+   	
+   		bgt $t0, 16, resetCounter
+   		bgt $t1, 16, exit
    		
-   	blt $t3, 97, add
+   		#li $v0, 11
+   		lb $a0, userInputKey($t0)
+   		#syscall
+   		
+   		move $t2, $a0
+   		
+   		#li $v0, 4
+		#la $a0, space
+		#syscall
+   		
+   		#li $v0, 11
+   		lb $a0, userInputText($t1)
+   		#syscall
+   		
+ 		move $t3, $a0
+ 		
+ 		#li $v0, 4
+		#la $a0, space
+		#syscall
+
+		add $t3, $t3, 97																						
+   		sub $t3, $t3, $t2
+   		
+   		blt $t3, 97, add
 				
-	continue2:
+   	continue2:
    	   		
-   	li $v0, 1
-   	move $a0, $t2
-   	syscall
+   		li $v0, 11
+   		move $a0, $t3
+   		syscall
    		
-   	li $v0, 4
-	la $a0, line
-	syscall
+   		#li $v0, 4
+		#la $a0, line
+		#syscall
    		
    	
-   	addi $t0, $t0, 1
-   	addi $t1, $t1, 1
+   		addi $t0, $t0, 1
+   		addi $t1, $t1, 1
    		
-   	j while
-   	
-   add: 
-	add $t3, $t3, 26
+   		j while2
+
+	add: 
+		add $t3, $t3, 26
   		
-	j continue2
-   	
+	   	j continue2
+
+  	
